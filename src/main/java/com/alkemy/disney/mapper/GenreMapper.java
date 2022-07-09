@@ -11,6 +11,7 @@ import java.util.List;
 public class GenreMapper {
 
     public GenreEntity genreDTO2Entity (GenreDTO dto){
+
         GenreEntity entity = new GenreEntity();
 
         entity.setName(dto.getName());
@@ -20,6 +21,7 @@ public class GenreMapper {
     }
 
     public GenreDTO genreEntity2DTO (GenreEntity entity){
+
         GenreDTO dto = new GenreDTO();
 
         dto.setId(entity.getId());
@@ -30,6 +32,7 @@ public class GenreMapper {
     }
 
     public List<GenreDTO> genreEntityList2DTOList(List<GenreEntity> entities) {
+
         List<GenreDTO> dtos = new ArrayList<>();
 
         for(GenreEntity entity : entities) {

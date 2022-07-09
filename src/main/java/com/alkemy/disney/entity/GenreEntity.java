@@ -29,5 +29,4 @@ public class GenreEntity {
 
     private boolean deleted = Boolean.FALSE;
 
-
 }

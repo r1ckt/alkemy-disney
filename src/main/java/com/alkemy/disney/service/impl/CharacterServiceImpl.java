@@ -21,7 +21,9 @@ public class CharacterServiceImpl implements CharacterService {
     private CharacterRepository characterRepository;
 
     @Autowired
-    public CharacterServiceImpl(CharacterMapper characterMapper, CharacterRepository characterRepository) {
+    public CharacterServiceImpl(CharacterMapper characterMapper,
+                                CharacterRepository characterRepository) {
+
         this.characterMapper = characterMapper;
         this.characterRepository = characterRepository;
     }
@@ -35,9 +37,10 @@ public class CharacterServiceImpl implements CharacterService {
     }
 
     public CharacterDTO update(Long id, CharacterDTO characterDTO){
+
         Optional<CharacterEntity> entity = characterRepository.findById(id);
 
-        if (!entity.isPresent()) {
+        if (entity.isEmpty()) {
             throw new ParamNotFoundException("Error: Invalid character id");
         }
 
@@ -45,6 +48,7 @@ public class CharacterServiceImpl implements CharacterService {
         CharacterEntity entitySaved = characterRepository.save(entity.get());
 
         return characterMapper.characterEntity2DTO(entitySaved,false);
+
     }
 
     public void delete(@NonNull Long id){
@@ -52,9 +56,10 @@ public class CharacterServiceImpl implements CharacterService {
     }
 
     public CharacterDTO findById(@NonNull Long id) {
+
         Optional<CharacterEntity> entity = characterRepository.findById(id);
 
-        if (!entity.isPresent()) {
+        if (entity.isEmpty()) {
             throw new ParamNotFoundException("Error: Invalid character id.");
         }
 
@@ -62,9 +67,10 @@ public class CharacterServiceImpl implements CharacterService {
     }
 
     public List<CharacterBasicDTO> getAll(){
+
         List<CharacterEntity> entities = characterRepository.findAll();
-        List<CharacterBasicDTO> result = characterMapper.characterEntitySet2BasicDTOSet(entities);
-        return result;
+
+        return characterMapper.characterEntitySet2BasicDTOSet(entities);
     }
 
 }

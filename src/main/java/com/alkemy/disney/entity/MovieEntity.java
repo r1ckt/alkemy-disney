@@ -1,8 +1,5 @@
 package com.alkemy.disney.entity;
 
-import com.alkemy.disney.dto.GenreDTO;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
@@ -43,11 +40,9 @@ public class MovieEntity {
     @Column(name = "movie_rate")
     private Integer rate;
 
-    @ManyToOne(fetch = LAZY, cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
-    @JoinColumn(name = "genre_id", insertable = false, updatable = false)
+    @ManyToOne(fetch = LAZY, cascade = {PERSIST, MERGE})
+    @JoinColumn(name = "genre_id", insertable = false,
+                                    updatable = false)
     private GenreEntity genre;
 
     @Column(name = "genre_id", nullable = false)
@@ -55,7 +50,7 @@ public class MovieEntity {
 
     private boolean deleted = Boolean.FALSE;
 
-    @ManyToMany(cascade = { PERSIST, MERGE })
+    @ManyToMany(cascade = {PERSIST, MERGE})
     @JoinTable(name = "movie_characters",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "character_id")

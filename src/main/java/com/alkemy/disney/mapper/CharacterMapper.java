@@ -38,6 +38,7 @@ public class CharacterMapper {
     public CharacterDTO characterEntity2DTO(CharacterEntity characterEntity, boolean loadMovies){
 
         CharacterDTO characterDTO = new CharacterDTO();
+
         characterDTO.setId(characterEntity.getId());
         characterDTO.setImage(characterEntity.getImage());
         characterDTO.setName(characterEntity.getName());
@@ -49,44 +50,60 @@ public class CharacterMapper {
     }
 
     public List<CharacterBasicDTO> CharacterEntitySet2BasicDTOSet (List<CharacterEntity> characterEntities){
+
         List<CharacterBasicDTO> dtos = new ArrayList<>();
+
         for (CharacterEntity entity : characterEntities){
             dtos.add(characterEntity2BasicDTO(entity));
         }
+
         return dtos;
     }
 
     private CharacterBasicDTO characterEntity2BasicDTO(CharacterEntity entity) {
+
         CharacterBasicDTO characterBasicDTO = new CharacterBasicDTO();
+
         characterBasicDTO.setImage(entity.getImage());
         characterBasicDTO.setName(entity.getName());
+
         return characterBasicDTO;
     }
 
 
     public List<CharacterBasicDTO> characterEntitySet2BasicDTOSet(List<CharacterEntity> characterEntities){
+
         List<CharacterBasicDTO> dtos = new ArrayList<>();
+
         for (CharacterEntity entity : characterEntities){
             dtos.add(characterEntity2BasicDTO(entity));
         }
+
         return dtos;
     }
 
     public Set<CharacterEntity> dtoSet2EntitySet(Set<CharacterDTO> dtoSet, boolean loadMovies) {
+
         Set<CharacterEntity> entitySet = new HashSet<>();
+
         for (CharacterDTO dto : dtoSet){
             entitySet.add(this.characterDTO2Entity(dto,true));
         }
+
         return entitySet;
     }
-    public CharacterEntity characterEntityRefreshValues(CharacterEntity personajeEntity, CharacterDTO personajeDT0) {
-        personajeEntity.setImage(personajeDT0.getImage());
-        personajeEntity.setName(personajeDT0.getName());
-        personajeEntity.setAge(personajeDT0.getAge());
-        personajeEntity.setWeight(personajeDT0.getWeight());
-        personajeEntity.setHistory(personajeDT0.getHistory());
-        personajeEntity.setId(personajeDT0.getId());
-        return personajeEntity;
+    
+    public CharacterEntity characterEntityRefreshValues(CharacterEntity characterEntity,
+                                                        CharacterDTO characterDT0) {
+
+        characterEntity.setImage(characterDT0.getImage());
+        characterEntity.setName(characterDT0.getName());
+        characterEntity.setAge(characterDT0.getAge());
+        characterEntity.setWeight(characterDT0.getWeight());
+        characterEntity.setHistory(characterDT0.getHistory());
+        characterEntity.setId(characterDT0.getId());
+
+        return characterEntity;
     }
 
 }

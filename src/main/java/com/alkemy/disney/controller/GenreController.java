@@ -1,7 +1,6 @@
 package com.alkemy.disney.controller;
 
 import com.alkemy.disney.dto.GenreDTO;
-import com.alkemy.disney.dto.MovieDTO;
 import com.alkemy.disney.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

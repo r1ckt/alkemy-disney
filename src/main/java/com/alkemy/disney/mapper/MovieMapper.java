@@ -27,9 +27,11 @@ public class MovieMapper {
     public MovieEntity movieDTO2Entity(MovieDTO movieDTO, boolean loadCharacters) {
 
         MovieEntity movieEntity = new MovieEntity();
+
         if(movieDTO.getId()!=null){
             movieEntity.setId(movieDTO.getId());
         }
+
         movieEntity.setImage(movieDTO.getImage());
         movieEntity.setTitle(movieDTO.getTitle());
         movieEntity.setCreationDate(movieDTO.getCreationDate());
@@ -46,7 +48,9 @@ public class MovieMapper {
     }
 
     public MovieDTO movieEntity2DTO(MovieEntity movieEntity, boolean b) {
+
         MovieDTO movieDTO = new MovieDTO();
+
         movieDTO.setId(movieEntity.getId());
         movieDTO.setImage(movieEntity.getImage());
         movieDTO.setTitle(movieEntity.getTitle());
@@ -58,44 +62,47 @@ public class MovieMapper {
     }
 
     public MovieBasicDTO movieEntity2BasicDTO(MovieEntity movieEntity){
+
         MovieBasicDTO movieBasicDTO = new MovieBasicDTO();
+
         movieBasicDTO.setImage(movieEntity.getImage());
         movieBasicDTO.setTitle(movieEntity.getTitle());
         movieBasicDTO.setCreationDate(movieEntity.getCreationDate());
+
         return movieBasicDTO;
     }
 
     public List<MovieBasicDTO> movieEntitySet2BasicDTOSet(List<MovieEntity> movieEntities){
+
         List<MovieBasicDTO> dtos = new ArrayList<>();
+
         for (MovieEntity entity : movieEntities){
             dtos.add(movieEntity2BasicDTO(entity));
         }
+
         return dtos;
     }
 
     public List<MovieDTO> entitySet2DtoList(List<MovieEntity> entities, boolean loadCharacters) {
+
         List<MovieDTO> movieDTOS = new ArrayList<>();
+
         for (MovieEntity entity : entities){
             movieDTOS.add(movieEntity2DTO(entity,loadCharacters));
         }
+
         return movieDTOS;
     }
 
     public Set<MovieEntity> dtoSet2EntitySet(Set<MovieDTO> dtoSet, boolean loadCharacters) {
+
         Set<MovieEntity> entitySet = new HashSet<>();
+
         for (MovieDTO dto : dtoSet){
             entitySet.add(this.movieDTO2Entity(dto,loadCharacters));
         }
+
         return entitySet;
     }
-
-    public MovieEntity updateValues(MovieEntity movieEntity, MovieDTO movieDTO){
-        movieEntity.setImage(movieDTO.getImage());
-        movieEntity.setTitle(movieDTO.getTitle());
-        movieEntity.setCreationDate(movieDTO.getCreationDate());
-        movieEntity.setRate(movieDTO.getRate());
-        return movieEntity;
-    }
-
 
 }

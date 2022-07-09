@@ -27,16 +27,15 @@ public class GenreServiceImpl implements GenreService {
         GenreEntity entity = genreMapper.genreDTO2Entity(genreDTO);
         GenreEntity  entitySaved = genreRepository.save(entity);
 
-        GenreDTO result = genreMapper.genreEntity2DTO(entitySaved);
-
-        return result;
+        return genreMapper.genreEntity2DTO(entitySaved);
     }
 
     @Override
     public List<GenreDTO> getAllGenres() {
+
         List<GenreEntity> entities = genreRepository.findAll();
-        List<GenreDTO> result = genreMapper.genreEntityList2DTOList(entities);
-        return result;
+
+        return genreMapper.genreEntityList2DTOList(entities);
     }
 
     @Override
@@ -46,13 +45,17 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public GenreDTO update(Long id, GenreDTO genreDTO){
+
         Optional<GenreEntity> entity = genreRepository.findById(id);
-        if (!entity.isPresent()) {
+
+        if (entity.isEmpty()) {
             throw new ParamNotFoundException("Error: Invalid character id");
         }
 
         genreMapper.genreEntityRefreshValues(entity.get(), genreDTO);
+
         GenreEntity entitySaved = genreRepository.save(entity.get());
+
         return genreMapper.genreEntity2DTO(entitySaved);
     }
 }
