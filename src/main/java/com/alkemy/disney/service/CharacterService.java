@@ -12,4 +12,5 @@ public interface CharacterService {
     void delete(@NonNull Long id);
     List<CharacterBasicDTO> getAll();
     CharacterDTO findById(@NonNull Long id);
+
 }

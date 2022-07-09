@@ -15,11 +15,14 @@ import java.util.Optional;
 @Service
 public class GenreServiceImpl implements GenreService {
 
-    @Autowired
     private GenreMapper genreMapper;
+    private GenreRepository genreRepository;
 
     @Autowired
-    private GenreRepository genreRepository;
+    public GenreServiceImpl(GenreMapper genreMapper, GenreRepository genreRepository) {
+        this.genreMapper = genreMapper;
+        this.genreRepository = genreRepository;
+    }
 
     @Override
     public GenreDTO save(GenreDTO genreDTO) {

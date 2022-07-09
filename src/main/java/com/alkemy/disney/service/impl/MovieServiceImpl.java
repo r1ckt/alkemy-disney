@@ -15,17 +15,22 @@ import java.util.List;
 @Service
 public class MovieServiceImpl implements MovieService {
 
-    @Autowired
     private MovieMapper movieMapper;
-
-    @Autowired
     private MovieRepository movieRepository;
-
-    @Autowired
     private CharacterMapper characterMapper;
+    private CharacterService characterService;
 
     @Autowired
-    private CharacterService characterService;
+    public MovieServiceImpl(MovieMapper movieMapper,
+                            MovieRepository movieRepository,
+                            CharacterMapper characterMapper,
+                            CharacterService characterService) {
+
+        this.movieMapper = movieMapper;
+        this.movieRepository = movieRepository;
+        this.characterMapper = characterMapper;
+        this.characterService = characterService;
+    }
 
     @Override
     public MovieDTO create(MovieDTO movieDTO) {

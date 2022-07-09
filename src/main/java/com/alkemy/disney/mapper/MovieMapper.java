@@ -18,11 +18,17 @@ import java.util.Set;
 @Component
 public class MovieMapper {
 
-    @Autowired
     private CharacterMapper characterMapper;
+    private GenreMapper genreMapper;
+
 
     @Autowired
-    private GenreMapper genreMapper;
+    public MovieMapper(CharacterMapper characterMapper,
+                       GenreMapper genreMapper) {
+
+        this.characterMapper = characterMapper;
+        this.genreMapper = genreMapper;
+    }
 
     public MovieEntity movieDTO2Entity(MovieDTO movieDTO, boolean loadCharacters) {
 
@@ -57,6 +63,7 @@ public class MovieMapper {
         movieDTO.setCreationDate(movieEntity.getCreationDate());
         movieDTO.setRate(movieEntity.getRate());
         movieDTO.setGenreId(movieEntity.getGenreId());
+        movieDTO.setGenre(movieDTO.getGenre());
 
         return movieDTO;
     }

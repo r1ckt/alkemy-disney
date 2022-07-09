@@ -14,8 +14,8 @@ import java.util.*;
 @Component
 public class CharacterMapper {
 
-    @Autowired
     @Lazy
+    @Autowired
     private MovieMapper movieMapper;
 
     public CharacterEntity characterDTO2Entity(CharacterDTO characterDTO, boolean loadMovies) {
@@ -27,11 +27,13 @@ public class CharacterMapper {
         characterEntity.setAge(characterDTO.getAge());
         characterEntity.setWeight(characterDTO.getWeight());
         characterEntity.setHistory(characterDTO.getHistory());
+
         if(loadMovies){
             Set<MovieDTO> dtoSet = characterDTO.getMovies();
             Set<MovieEntity> movieEntities = movieMapper.dtoSet2EntitySet(dtoSet, true);
             characterEntity.setMovies(movieEntities);
         }
+
         return characterEntity;
     }
 
@@ -64,6 +66,7 @@ public class CharacterMapper {
 
         CharacterBasicDTO characterBasicDTO = new CharacterBasicDTO();
 
+        characterBasicDTO.setId(entity.getId());
         characterBasicDTO.setImage(entity.getImage());
         characterBasicDTO.setName(entity.getName());
 
