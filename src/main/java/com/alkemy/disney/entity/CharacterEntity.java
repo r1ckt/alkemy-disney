@@ -41,7 +41,7 @@ public class CharacterEntity {
 
     private boolean deleted = Boolean.FALSE;
 
-    @ManyToMany(mappedBy = "characters", cascade = PERSIST)
+    @ManyToMany(mappedBy = "characters", cascade = ALL)
     private Set<MovieEntity> movies = new HashSet<>();
 
 }

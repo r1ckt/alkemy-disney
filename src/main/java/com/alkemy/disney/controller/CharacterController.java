@@ -2,7 +2,6 @@ package com.alkemy.disney.controller;
 
 import com.alkemy.disney.dto.CharacterBasicDTO;
 import com.alkemy.disney.dto.CharacterDTO;
-import com.alkemy.disney.dto.GenreDTO;
 import com.alkemy.disney.service.CharacterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -23,7 +23,7 @@ public class MovieMapper {
 
 
     @Autowired
-    public MovieMapper(CharacterMapper characterMapper,
+    public MovieMapper(@Lazy CharacterMapper characterMapper,
                        GenreMapper genreMapper) {
 
         this.characterMapper = characterMapper;

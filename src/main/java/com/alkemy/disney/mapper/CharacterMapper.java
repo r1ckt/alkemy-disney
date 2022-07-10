@@ -14,7 +14,6 @@ import java.util.*;
 @Component
 public class CharacterMapper {
 
-    @Lazy
     @Autowired
     private MovieMapper movieMapper;
 
