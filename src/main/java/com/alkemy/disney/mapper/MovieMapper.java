@@ -2,14 +2,19 @@
 package com.alkemy.disney.mapper;
 
 import com.alkemy.disney.dto.CharacterDTO;
+import com.alkemy.disney.dto.GenreDTO;
 import com.alkemy.disney.dto.MovieBasicDTO;
 import com.alkemy.disney.dto.MovieDTO;
 import com.alkemy.disney.entity.CharacterEntity;
+import com.alkemy.disney.entity.GenreEntity;
 import com.alkemy.disney.entity.MovieEntity;
+import com.alkemy.disney.repository.GenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -18,40 +23,43 @@ import java.util.Set;
 @Component
 public class MovieMapper {
 
-    private CharacterMapper movieMapper;
+    private CharacterMapper characterMapper;
     private GenreMapper genreMapper;
-
+    private GenreRepository genreRepository;
 
     @Autowired
-    public MovieMapper(@Lazy CharacterMapper movieMapper,
-                       GenreMapper genreMapper) {
+    public MovieMapper(@Lazy CharacterMapper characterMapper,
+                                GenreMapper genreMapper,
+                                 GenreRepository genreRepository) {
 
-        this.movieMapper = movieMapper;
+        this.genreRepository = genreRepository;
+        this.characterMapper = characterMapper;
         this.genreMapper = genreMapper;
     }
 
-    public MovieEntity movieDTO2Entity(MovieDTO movieDTO, boolean loadCharacters) {
 
-        MovieEntity movieEntity = new MovieEntity();
-
-        if(movieDTO.getId()!=null){
-            movieEntity.setId(movieDTO.getId());
-        }
-
-        movieEntity.setImage(movieDTO.getImage());
-        movieEntity.setTitle(movieDTO.getTitle());
-        movieEntity.setCreationDate(movieDTO.getCreationDate());
-        movieEntity.setRate(movieDTO.getRate());
-        movieEntity.setGenreId(movieDTO.getGenreId());
-
-        if(loadCharacters){
-            Set<CharacterDTO> dtoSet = movieDTO.getCharacters();
-            Set<CharacterEntity> movieEntitySet =  movieMapper.dtoSet2EntitySet(dtoSet,true);
-            movieEntity.setCharacters(movieEntitySet);
-        }
-
-        return movieEntity;
+    private LocalDate string2LocalDate(String stringDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(stringDate, formatter);
+        return date;
     }
+
+    public MovieEntity movieDTO2Entity(MovieDTO dto) {
+        GenreEntity genre = genreRepository.findById(dto.getGenreId()).orElseThrow();
+
+        MovieEntity entity = new MovieEntity();
+        entity.setImage(dto.getImage());
+        entity.setTitle(dto.getTitle());
+        entity.setCreationDate(this.string2LocalDate(dto.getCreationDate()));
+        entity.setRate(dto.getRate());
+        entity.setGenre(genre);
+
+        Set<CharacterEntity> characters = this.characterMapper.characterESet2DTOSet(dto.getCharacters()));
+        entity.setCharacters(characters);
+
+        return movie;
+    }
+
 
     public MovieDTO movieEntity2DTO(MovieEntity movieEntity) {
 
@@ -63,10 +71,16 @@ public class MovieMapper {
         movieDTO.setCreationDate(movieEntity.getCreationDate());
         movieDTO.setRate(movieEntity.getRate());
         movieDTO.setGenreId(movieEntity.getGenreId());
-        movieDTO.setGenre(movieDTO.getGenre());
+
+        GenreDTO genre = this.genreMapper.genreEntity2DTO(movieEntity.getGenre());
+        Set<CharacterDTO> characters = this.characterMapper.characterEntitySet2DTOSet(movieEntity.getCharacters());
+
+        movieDTO.setGenre(genre);
+        movieDTO.setCharacters(characters);
 
         return movieDTO;
     }
+
 
     public MovieBasicDTO movieEntity2BasicDTO(MovieEntity movieEntity){
 
@@ -106,7 +120,7 @@ public class MovieMapper {
         Set<MovieEntity> entitySet = new HashSet<>();
 
         for (MovieDTO dto : dtoSet){
-            entitySet.add(this.movieDTO2Entity(dto,loadCharacters));
+            entitySet.add(this.movieDTO2Entity(dto, loadCharacters));
         }
 
         return entitySet;

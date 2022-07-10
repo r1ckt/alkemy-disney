@@ -44,7 +44,7 @@ public class CharacterServiceImpl implements CharacterService {
             throw new ParamNotFoundException("Error: Invalid character id");
         }
 
-        characterMapper.characterEntityRefreshValues(entity.get(),characterDTO);
+        characterMapper.characterEntityRefreshValues(entity.get(), characterDTO);
         CharacterEntity entitySaved = characterRepository.save(entity.get());
 
         return characterMapper.characterEntity2DTO(entitySaved,false);
