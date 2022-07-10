@@ -18,15 +18,15 @@ import java.util.Set;
 @Component
 public class MovieMapper {
 
-    private CharacterMapper characterMapper;
+    private CharacterMapper movieMapper;
     private GenreMapper genreMapper;
 
 
     @Autowired
-    public MovieMapper(@Lazy CharacterMapper characterMapper,
+    public MovieMapper(@Lazy CharacterMapper movieMapper,
                        GenreMapper genreMapper) {
 
-        this.characterMapper = characterMapper;
+        this.movieMapper = movieMapper;
         this.genreMapper = genreMapper;
     }
 
@@ -46,14 +46,14 @@ public class MovieMapper {
 
         if(loadCharacters){
             Set<CharacterDTO> dtoSet = movieDTO.getCharacters();
-            Set<CharacterEntity> characterEntitySet =  characterMapper.dtoSet2EntitySet(dtoSet,true);
-            movieEntity.setCharacters(characterEntitySet);
+            Set<CharacterEntity> movieEntitySet =  movieMapper.dtoSet2EntitySet(dtoSet,true);
+            movieEntity.setCharacters(movieEntitySet);
         }
 
         return movieEntity;
     }
 
-    public MovieDTO movieEntity2DTO(MovieEntity movieEntity, boolean b) {
+    public MovieDTO movieEntity2DTO(MovieEntity movieEntity) {
 
         MovieDTO movieDTO = new MovieDTO();
 
@@ -90,12 +90,12 @@ public class MovieMapper {
         return dtos;
     }
 
-    public List<MovieDTO> entitySet2DtoList(List<MovieEntity> entities, boolean loadCharacters) {
+    public List<MovieDTO> entitySet2DtoList(List<MovieEntity> entities) {
 
         List<MovieDTO> movieDTOS = new ArrayList<>();
 
         for (MovieEntity entity : entities){
-            movieDTOS.add(movieEntity2DTO(entity,loadCharacters));
+            movieDTOS.add(movieEntity2DTO(entity));
         }
 
         return movieDTOS;
@@ -110,6 +110,22 @@ public class MovieMapper {
         }
 
         return entitySet;
+    }
+
+    public MovieEntity movieEntityRefreshValues(MovieEntity movieEntity,
+                                             MovieDTO movieDTO) {
+
+        movieEntity.setId(movieDTO.getId());
+        movieEntity.setTitle(movieDTO.getTitle());
+        movieEntity.setImage(movieDTO.getImage());
+        movieEntity.setCreationDate(movieDTO.getCreationDate());
+        movieEntity.setRate(movieDTO.getRate());
+        movieEntity.setGenreId(movieDTO.getGenreId());
+
+
+        // TODO: setGenre and setCharacters
+
+        return movieEntity;
     }
 
 }

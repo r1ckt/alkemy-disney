@@ -16,7 +16,7 @@ import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 
 @Entity
-@Table(name = "movies")
+@Table(name = "movie")
 @SQLDelete(sql="UPDATE movie SET deleted = true WHERE id=?")
 @Where(clause = "deleted = false")
 @Getter

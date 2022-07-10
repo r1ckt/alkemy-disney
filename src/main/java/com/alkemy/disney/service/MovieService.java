@@ -9,5 +9,6 @@ public interface MovieService {
     MovieDTO create(MovieDTO movieDTO);
     List<MovieDTO> getAllMovies();
     void delete(Long id);
+    MovieDTO update(Long id, MovieDTO movieDTO);
 
 }
