@@ -6,8 +6,10 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+
+import java.util.List;
+
 
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.GenerationType.*;
@@ -41,6 +43,6 @@ public class CharacterEntity {
     private boolean deleted = Boolean.FALSE;
 
     @ManyToMany(mappedBy = "characters", cascade = ALL)
-    private Set<MovieEntity> movies = new HashSet<>();
+    private List<MovieEntity> movies = new ArrayList<>();
 
 }

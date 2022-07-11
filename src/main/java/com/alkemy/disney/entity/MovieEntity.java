@@ -12,7 +12,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static javax.persistence.CascadeType.*;
-import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 
 @Entity
@@ -33,20 +32,16 @@ public class MovieEntity {
     @Column(name = "movie_title")
     private String title;
 
-    @Column(name = "movie_creation_date")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "movie_year")
+    @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate creationDate;
 
     @Column(name = "movie_rate")
     private Integer rate;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "genre_id", insertable = false,
-                                    updatable = false)
+    @JoinColumn(name = "genre_id")
     private GenreEntity genre;
-
-    @Column(name = "genre_id", nullable = false)
-    private Long genreId;
 
     private boolean deleted = Boolean.FALSE;
 

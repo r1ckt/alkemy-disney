@@ -40,45 +40,52 @@ public class MovieMapper {
 
     private LocalDate string2LocalDate(String stringDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate date = LocalDate.parse(stringDate, formatter);
-        return date;
+
+        return LocalDate.parse(stringDate, formatter);
     }
 
     public MovieEntity movieDTO2Entity(MovieDTO dto) {
-        GenreEntity genre = genreRepository.findById(dto.getGenreId()).orElseThrow();
 
-        MovieEntity entity = new MovieEntity();
-        entity.setImage(dto.getImage());
-        entity.setTitle(dto.getTitle());
-        entity.setCreationDate(this.string2LocalDate(dto.getCreationDate()));
-        entity.setRate(dto.getRate());
-        entity.setGenre(genre);
+        GenreEntity genre = genreRepository.findById(dto.getGenreId())
+                                            .orElseThrow();
 
-        Set<CharacterEntity> characters = this.characterMapper.characterESet2DTOSet(dto.getCharacters()));
-        entity.setCharacters(characters);
+        MovieEntity movie = new MovieEntity();
 
+        movie.setGenre(genre);
+        movie.setRate(dto.getRate());
+        movie.setImage(dto.getImage());
+        movie.setTitle(dto.getTitle());
+        movie.setCreationDate(this.string2LocalDate(dto.getCreationDate()));
+
+        Set<CharacterEntity> characters =
+                this.characterMapper.characterDTOList2Entity(dto.getCharacters());
+
+        movie.setCharacters(characters);
         return movie;
     }
 
 
-    public MovieDTO movieEntity2DTO(MovieEntity movieEntity) {
+    public MovieDTO movieEntity2DTO(MovieEntity entity, boolean loadCharacters) {
 
-        MovieDTO movieDTO = new MovieDTO();
+        MovieDTO dto = new MovieDTO();
 
-        movieDTO.setId(movieEntity.getId());
-        movieDTO.setImage(movieEntity.getImage());
-        movieDTO.setTitle(movieEntity.getTitle());
-        movieDTO.setCreationDate(movieEntity.getCreationDate());
-        movieDTO.setRate(movieEntity.getRate());
-        movieDTO.setGenreId(movieEntity.getGenreId());
+        dto.setId(entity.getId());
+        dto.setImage(entity.getImage());
+        dto.setTitle(entity.getTitle());
+        dto.setCreationDate(entity.getCreationDate().toString());
+        dto.setRate(entity.getRate());
+        dto.setGenreId(entity.getGenre().getId());
 
-        GenreDTO genre = this.genreMapper.genreEntity2DTO(movieEntity.getGenre());
-        Set<CharacterDTO> characters = this.characterMapper.characterEntitySet2DTOSet(movieEntity.getCharacters());
 
-        movieDTO.setGenre(genre);
-        movieDTO.setCharacters(characters);
+        if (loadCharacters) {
+            List<CharacterDTO> characterDTOS =
+                    this.characterMapper
+                    .characterEntitySet2DTOList(entity.getCharacters(), false);
 
-        return movieDTO;
+            dto.setCharacters(characterDTOS);
+        }
+
+        return dto;
     }
 
 
@@ -88,7 +95,7 @@ public class MovieMapper {
 
         movieBasicDTO.setImage(movieEntity.getImage());
         movieBasicDTO.setTitle(movieEntity.getTitle());
-        movieBasicDTO.setCreationDate(movieEntity.getCreationDate());
+        movieBasicDTO.setCreationDate(movieEntity.getCreationDate().toString());
 
         return movieBasicDTO;
     }
@@ -109,18 +116,19 @@ public class MovieMapper {
         List<MovieDTO> movieDTOS = new ArrayList<>();
 
         for (MovieEntity entity : entities){
-            movieDTOS.add(movieEntity2DTO(entity));
+            movieDTOS.add(movieEntity2DTO(entity, false));
         }
 
         return movieDTOS;
     }
 
-    public Set<MovieEntity> dtoSet2EntitySet(Set<MovieDTO> dtoSet, boolean loadCharacters) {
+    public Set<MovieEntity> dtoSet2EntitySet(Set<MovieDTO> dtoSet,
+                                             boolean loadCharacters) {
 
         Set<MovieEntity> entitySet = new HashSet<>();
 
         for (MovieDTO dto : dtoSet){
-            entitySet.add(this.movieDTO2Entity(dto, loadCharacters));
+            entitySet.add(this.movieDTO2Entity(dto));
         }
 
         return entitySet;
@@ -129,17 +137,31 @@ public class MovieMapper {
     public MovieEntity movieEntityRefreshValues(MovieEntity movieEntity,
                                              MovieDTO movieDTO) {
 
-        movieEntity.setId(movieDTO.getId());
         movieEntity.setTitle(movieDTO.getTitle());
         movieEntity.setImage(movieDTO.getImage());
-        movieEntity.setCreationDate(movieDTO.getCreationDate());
+        movieEntity.setCreationDate(this.string2LocalDate(movieDTO.getCreationDate()));
         movieEntity.setRate(movieDTO.getRate());
-        movieEntity.setGenreId(movieDTO.getGenreId());
 
+        GenreEntity genre = genreRepository.getById(movieDTO.getGenreId());
 
-        // TODO: setGenre and setCharacters
+        movieEntity.setGenre(genre);
+
+        Set<CharacterEntity> characters = this.characterMapper.
+                                characterDTOList2Entity(movieDTO.getCharacters());
 
         return movieEntity;
+    }
+
+    public List<MovieDTO> movieEntityList2DTOList(List<MovieEntity> movies,
+                                                  boolean loadCharacters) {
+
+        List<MovieDTO> moviesDTOS = new ArrayList<>();
+
+        for (MovieEntity movie:movies) {
+            moviesDTOS.add(this.movieEntity2DTO(movie, loadCharacters));
+        }
+
+        return moviesDTOS;
     }
 
 }

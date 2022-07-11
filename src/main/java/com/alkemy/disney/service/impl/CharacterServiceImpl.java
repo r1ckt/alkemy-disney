@@ -30,7 +30,7 @@ public class CharacterServiceImpl implements CharacterService {
 
     public CharacterDTO save(CharacterDTO characterDTO){
 
-        CharacterEntity entity = characterMapper.characterDTO2Entity(characterDTO,false);
+        CharacterEntity entity = characterMapper.characterDTO2Entity(characterDTO);
         CharacterEntity entitySaved = characterRepository.save(entity);
 
         return characterMapper.characterEntity2DTO(entitySaved,false);
@@ -70,7 +70,7 @@ public class CharacterServiceImpl implements CharacterService {
 
         List<CharacterEntity> entities = characterRepository.findAll();
 
-        return characterMapper.characterEntitySet2BasicDTOSet(entities);
+        return this.characterMapper.characterEntitySet2BasicDTOList(entities);
     }
 
 }

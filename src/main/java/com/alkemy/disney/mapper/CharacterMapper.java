@@ -17,7 +17,7 @@ public class CharacterMapper {
     @Autowired
     private MovieMapper movieMapper;
 
-    public CharacterEntity characterDTO2Entity(CharacterDTO characterDTO, boolean loadMovies) {
+    public CharacterEntity characterDTO2Entity(CharacterDTO characterDTO) {
 
         CharacterEntity characterEntity = new CharacterEntity();
 
@@ -26,15 +26,6 @@ public class CharacterMapper {
         characterEntity.setAge(characterDTO.getAge());
         characterEntity.setWeight(characterDTO.getWeight());
         characterEntity.setHistory(characterDTO.getHistory());
-
-        Set<MovieEntity> movies = this.movieMapper.dtoSet2EntitySet(characterDTO.getMovies(), true);
-        characterEntity.setMovies(movies);
-
-        if(loadMovies){
-            Set<MovieDTO> dtoSet = characterDTO.getMovies();
-            Set<MovieEntity> movieEntities = movieMapper.dtoSet2EntitySet(dtoSet, true);
-            characterEntity.setMovies(movieEntities);
-        }
 
         return characterEntity;
     }
@@ -51,6 +42,12 @@ public class CharacterMapper {
         characterDTO.setAge(characterEntity.getAge());
         characterDTO.setWeight(characterEntity.getWeight());
         characterDTO.setHistory(characterEntity.getHistory());
+
+        if(loadMovies){
+            List<MovieDTO> moviesDTO = this.movieMapper.movieEntityList2DTOList(characterEntity.getMovies(), false);
+
+            characterDTO.setMovies(moviesDTO);
+        }
 
         return characterDTO;
     }
@@ -78,9 +75,9 @@ public class CharacterMapper {
     }
 
 
-    public Set<CharacterBasicDTO> characterEntitySet2BasicDTOSet(Set<CharacterEntity> characterEntities){
+    public List<CharacterBasicDTO> characterEntitySet2BasicDTOList(Collection<CharacterEntity> characterEntities){
 
-        Set<CharacterBasicDTO> dtos = new HashSet<>();
+        List<CharacterBasicDTO> dtos = new ArrayList<>();
 
         for (CharacterEntity entity : characterEntities){
             dtos.add(characterEntity2BasicDTO(entity));
@@ -89,12 +86,19 @@ public class CharacterMapper {
         return dtos;
     }
 
-    public Set<CharacterDTO> characterEntitySet2DTOSet(Set<CharacterEntity> characterEntities){
+    public List<CharacterBasicDTO> characterEntitySet2DTOList(Set<CharacterEntity> characterEntities){
 
-        Set<CharacterDTO> dtos = new HashSet<>();
+        List<CharacterBasicDTO> dtos = new ArrayList<>();
+        CharacterBasicDTO characterBasicDTO = new CharacterBasicDTO();
+
 
         for (CharacterEntity entity : characterEntities){
-            dtos.add(characterEntity2DTO(entity, true));
+
+            characterBasicDTO.setId(entity.getId());
+            characterBasicDTO.setImage(entity.getImage());
+            characterBasicDTO.setName(entity.getName());
+
+            dtos.add(characterBasicDTO);
         }
 
         return dtos;
@@ -107,16 +111,27 @@ public class CharacterMapper {
         entity.setHistory(characterDTO.getHistory());
     }
 
-    public Set<CharacterDTO> iconEntitySet2DTOSet(Collection<CharacterEntity> entities, boolean loadPaises) {
 
-        Set<CharacterDTO> dtos = new HashSet<>();
+    public List<CharacterDTO> characterEntitySet2DTOList(
+                                                Collection<CharacterEntity> characters,
+                                                boolean loadMovies) {
 
-        for (CharacterEntity entity : entities) {
-            dtos.add(this.characterEntity2DTO(entity, loadPaises));
+        List<CharacterDTO> characterDTOS = new ArrayList<>();
+
+        for (CharacterEntity dto : characters) {
+            characterDTOS.add(this.characterEntity2DTO(dto, loadMovies));
         }
 
-        return dtos;
+        return characterDTOS;
     }
 
+    public Set<CharacterEntity> characterDTOList2Entity(List<CharacterDTO> characterDTOS) {
 
+        Set<CharacterEntity> characters = new HashSet<>();
+
+        for (CharacterDTO dto : characterDTOS) {
+            characters.add(this.characterDTO2Entity(dto));
+        }
+        return characters;
+    }
 }
