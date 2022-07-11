@@ -34,4 +34,17 @@ public class MovieController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+
+    @PostMapping("/{idMovie}/character/{idCharacter}")
+    public ResponseEntity<Void> addCharacter(@PathVariable Long idMovie, @PathVariable Long idCharacter) {
+        this.movieService.addCharacter(idMovie, idCharacter);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @DeleteMapping("/{idMovie}/character/{idCharacter}")
+    public ResponseEntity<Void> removeCharacter(@PathVariable Long idMovie, @PathVariable Long idCharacter) {
+        this.movieService.removeCharacter(idMovie, idCharacter);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 }

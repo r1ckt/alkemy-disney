@@ -17,7 +17,7 @@ public class GenreEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private Long id; // Integer
+    private Long id; // can be Integer
 
     @Column(name = "genre_name")
     private String name;

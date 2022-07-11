@@ -34,9 +34,4 @@ public class GenreController {
         return genreService.update(id, genreDTO);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
-        this.genreService.delete(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
 }

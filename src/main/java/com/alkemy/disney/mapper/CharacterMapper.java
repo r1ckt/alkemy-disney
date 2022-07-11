@@ -30,21 +30,19 @@ public class CharacterMapper {
         return characterEntity;
     }
 
-
-
-    public CharacterDTO characterEntity2DTO(CharacterEntity characterEntity, boolean loadMovies){
+    public CharacterDTO characterEntity2DTO(CharacterEntity entity, boolean loadMovies){
 
         CharacterDTO characterDTO = new CharacterDTO();
 
-        characterDTO.setId(characterEntity.getId());
-        characterDTO.setImage(characterEntity.getImage());
-        characterDTO.setName(characterEntity.getName());
-        characterDTO.setAge(characterEntity.getAge());
-        characterDTO.setWeight(characterEntity.getWeight());
-        characterDTO.setHistory(characterEntity.getHistory());
+        characterDTO.setId(entity.getId());
+        characterDTO.setImage(entity.getImage());
+        characterDTO.setName(entity.getName());
+        characterDTO.setAge(entity.getAge());
+        characterDTO.setWeight(entity.getWeight());
+        characterDTO.setHistory(entity.getHistory());
 
         if(loadMovies){
-            List<MovieDTO> moviesDTO = this.movieMapper.movieEntityList2DTOList(characterEntity.getMovies(), false);
+            List<MovieDTO> moviesDTO = this.movieMapper.movieEntityList2DTOList(entity.getMovies(), false);
 
             characterDTO.setMovies(moviesDTO);
         }
@@ -52,15 +50,27 @@ public class CharacterMapper {
         return characterDTO;
     }
 
-    public List<CharacterBasicDTO> CharacterEntitySet2BasicDTOSet (List<CharacterEntity> characterEntities){
+    public List<CharacterDTO> characterEntitySet2DTOList(Collection<CharacterEntity> characters,
+                                                         boolean loadMovies) {
 
-        List<CharacterBasicDTO> dtos = new ArrayList<>();
+        List<CharacterDTO> characterDTOS = new ArrayList<>();
 
-        for (CharacterEntity entity : characterEntities){
-            dtos.add(characterEntity2BasicDTO(entity));
+        for (CharacterEntity dto : characters) {
+            characterDTOS.add(this.characterEntity2DTO(dto, loadMovies));
         }
 
-        return dtos;
+        return characterDTOS;
+    }
+
+    public Set<CharacterEntity> characterDTOList2Entity(List<CharacterDTO> dtos) {
+
+        Set<CharacterEntity> characters = new HashSet<>();
+
+        for (CharacterDTO dto : dtos) {
+            characters.add(this.characterDTO2Entity(dto));
+        }
+
+        return characters;
     }
 
     private CharacterBasicDTO characterEntity2BasicDTO(CharacterEntity entity) {
@@ -86,52 +96,13 @@ public class CharacterMapper {
         return dtos;
     }
 
-    public List<CharacterBasicDTO> characterEntitySet2DTOList(Set<CharacterEntity> characterEntities){
-
-        List<CharacterBasicDTO> dtos = new ArrayList<>();
-        CharacterBasicDTO characterBasicDTO = new CharacterBasicDTO();
-
-
-        for (CharacterEntity entity : characterEntities){
-
-            characterBasicDTO.setId(entity.getId());
-            characterBasicDTO.setImage(entity.getImage());
-            characterBasicDTO.setName(entity.getName());
-
-            dtos.add(characterBasicDTO);
-        }
-
-        return dtos;
-    }
-
     public void characterEntityRefreshValues(CharacterEntity entity, CharacterDTO characterDTO) {
+
         entity.setImage(characterDTO.getImage());
         entity.setWeight(characterDTO.getWeight());
         entity.setAge(characterDTO.getAge());
         entity.setHistory(characterDTO.getHistory());
+
     }
 
-
-    public List<CharacterDTO> characterEntitySet2DTOList(
-                                                Collection<CharacterEntity> characters,
-                                                boolean loadMovies) {
-
-        List<CharacterDTO> characterDTOS = new ArrayList<>();
-
-        for (CharacterEntity dto : characters) {
-            characterDTOS.add(this.characterEntity2DTO(dto, loadMovies));
-        }
-
-        return characterDTOS;
-    }
-
-    public Set<CharacterEntity> characterDTOList2Entity(List<CharacterDTO> characterDTOS) {
-
-        Set<CharacterEntity> characters = new HashSet<>();
-
-        for (CharacterDTO dto : characterDTOS) {
-            characters.add(this.characterDTO2Entity(dto));
-        }
-        return characters;
-    }
 }
