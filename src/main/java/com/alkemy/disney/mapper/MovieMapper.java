@@ -77,29 +77,29 @@ public class MovieMapper {
         return dto;
     }
 
-    public List<MovieDTO> movieEntityList2DTOList(List<MovieEntity> movies, boolean loadCharacters) {
+    public List<MovieDTO> movieEntityList2DTOList(List<MovieEntity> entityList, boolean loadCharacters) {
 
-        List<MovieDTO> moviesDTOS = new ArrayList<>();
+        List<MovieDTO> dtos = new ArrayList<>();
 
-        for (MovieEntity entity : movies) {
-            moviesDTOS.add(this.movieEntity2DTO(entity, loadCharacters));
+        for (MovieEntity entity : entityList) {
+            dtos.add(this.movieEntity2DTO(entity, loadCharacters));
         }
 
-        return moviesDTOS;
+        return dtos;
     }
 
 
-    public MovieEntity movieEntityRefreshValues(MovieEntity entity, MovieDTO movieDTO) {
+    public MovieEntity movieEntityRefreshValues(MovieEntity entity, MovieDTO dto) {
 
-        entity.setTitle(movieDTO.getTitle());
-        entity.setImage(movieDTO.getImage());
-        entity.setRate(movieDTO.getRate());
-        entity.setCreationDate(this.string2LocalDate(movieDTO.getCreationDate()));
+        entity.setTitle(dto.getTitle());
+        entity.setImage(dto.getImage());
+        entity.setRate(dto.getRate());
+        entity.setCreationDate(this.string2LocalDate(dto.getCreationDate()));
 
-        GenreEntity genre = genreRepository.findById(movieDTO.getGenreId()).get();
+        GenreEntity genre = genreRepository.findById(dto.getGenreId()).get();
         entity.setGenre(genre);
 
-        Set<CharacterEntity> characters = this.characterMapper.characterDTOList2Entity(movieDTO.getCharacters());
+        Set<CharacterEntity> characters = this.characterMapper.characterDTOList2Entity(dto.getCharacters());
         entity.setCharacters(characters);
 
         return entity;

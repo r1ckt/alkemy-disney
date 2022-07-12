@@ -42,7 +42,7 @@ public class CharacterEntity {
 
     private boolean deleted = Boolean.FALSE;
 
-    @ManyToMany(mappedBy = "characters", cascade = ALL)
+    @ManyToMany(mappedBy = "characters")
     private List<MovieEntity> movies = new ArrayList<>();
 
 }

@@ -33,6 +33,7 @@ public class MovieServiceImpl implements MovieService {
         this.movieMapper = movieMapper;
         this.movieRepository = movieRepository;
         this.characterRepository = characterRepository;
+        this.movieSpecification = movieSpecification;
     }
 
     @Override
@@ -41,7 +42,7 @@ public class MovieServiceImpl implements MovieService {
         MovieEntity movieEntity = movieMapper.movieDTO2Entity(movieDTO);
         MovieEntity savedMovie = movieRepository.save(movieEntity);
 
-        return movieMapper.movieEntity2DTO(savedMovie, true);
+        return movieMapper.movieEntity2DTO(savedMovie, false);
     }
 
     @Override
@@ -103,9 +104,9 @@ public class MovieServiceImpl implements MovieService {
                 this.movieSpecification.getByFilters(filtersDTO)
         );
 
-        List<MovieDTO> movieDTOS = this.movieMapper.movieEntityList2DTOList(movies, true);
+        List<MovieDTO> dtos = this.movieMapper.movieEntityList2DTOList(movies, true);
 
-        return movieDTOS;
+        return dtos;
     }
 
 
