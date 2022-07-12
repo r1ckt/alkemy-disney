@@ -4,9 +4,7 @@ import com.alkemy.disney.dto.CharacterBasicDTO;
 import com.alkemy.disney.dto.CharacterDTO;
 import com.alkemy.disney.dto.MovieDTO;
 import com.alkemy.disney.entity.CharacterEntity;
-import com.alkemy.disney.entity.MovieEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -17,91 +15,90 @@ public class CharacterMapper {
     @Autowired
     private MovieMapper movieMapper;
 
-    public CharacterEntity characterDTO2Entity(CharacterDTO characterDTO) {
+    public CharacterEntity characterDTO2Entity(CharacterDTO dto) {
 
-        CharacterEntity characterEntity = new CharacterEntity();
+        CharacterEntity entity = new CharacterEntity();
 
-        characterEntity.setImage(characterDTO.getImage());
-        characterEntity.setName(characterDTO.getName());
-        characterEntity.setAge(characterDTO.getAge());
-        characterEntity.setWeight(characterDTO.getWeight());
-        characterEntity.setHistory(characterDTO.getHistory());
+        entity.setImage(dto.getImage());
+        entity.setName(dto.getName());
+        entity.setAge(dto.getAge());
+        entity.setWeight(dto.getWeight());
+        entity.setHistory(dto.getHistory());
 
-        return characterEntity;
+        return entity;
     }
 
     public CharacterDTO characterEntity2DTO(CharacterEntity entity, boolean loadMovies){
 
-        CharacterDTO characterDTO = new CharacterDTO();
+        CharacterDTO dto = new CharacterDTO();
 
-        characterDTO.setId(entity.getId());
-        characterDTO.setImage(entity.getImage());
-        characterDTO.setName(entity.getName());
-        characterDTO.setAge(entity.getAge());
-        characterDTO.setWeight(entity.getWeight());
-        characterDTO.setHistory(entity.getHistory());
+        dto.setId(entity.getId());
+        dto.setImage(entity.getImage());
+        dto.setName(entity.getName());
+        dto.setAge(entity.getAge());
+        dto.setWeight(entity.getWeight());
+        dto.setHistory(entity.getHistory());
 
         if(loadMovies){
             List<MovieDTO> moviesDTO = this.movieMapper.movieEntityList2DTOList(entity.getMovies(), false);
 
-            characterDTO.setMovies(moviesDTO);
+            dto.setMovies(moviesDTO);
         }
 
-        return characterDTO;
+        return dto;
     }
 
-    public List<CharacterDTO> characterEntitySet2DTOList(Collection<CharacterEntity> characters,
-                                                         boolean loadMovies) {
+    public List<CharacterDTO> characterEntitySet2DTOList(Collection<CharacterEntity> entityList, boolean loadMovies) {
 
-        List<CharacterDTO> characterDTOS = new ArrayList<>();
+        List<CharacterDTO> dtos = new ArrayList<>();
 
-        for (CharacterEntity dto : characters) {
-            characterDTOS.add(this.characterEntity2DTO(dto, loadMovies));
-        }
-
-        return characterDTOS;
-    }
-
-    public Set<CharacterEntity> characterDTOList2Entity(List<CharacterDTO> dtos) {
-
-        Set<CharacterEntity> characters = new HashSet<>();
-
-        for (CharacterDTO dto : dtos) {
-            characters.add(this.characterDTO2Entity(dto));
-        }
-
-        return characters;
-    }
-
-    private CharacterBasicDTO characterEntity2BasicDTO(CharacterEntity entity) {
-
-        CharacterBasicDTO characterBasicDTO = new CharacterBasicDTO();
-
-        characterBasicDTO.setId(entity.getId());
-        characterBasicDTO.setImage(entity.getImage());
-        characterBasicDTO.setName(entity.getName());
-
-        return characterBasicDTO;
-    }
-
-
-    public List<CharacterBasicDTO> characterEntitySet2BasicDTOList(Collection<CharacterEntity> characterEntities){
-
-        List<CharacterBasicDTO> dtos = new ArrayList<>();
-
-        for (CharacterEntity entity : characterEntities){
-            dtos.add(characterEntity2BasicDTO(entity));
+        for (CharacterEntity entity : entityList) {
+            dtos.add(this.characterEntity2DTO(entity, loadMovies));
         }
 
         return dtos;
     }
 
-    public void characterEntityRefreshValues(CharacterEntity entity, CharacterDTO characterDTO) {
+    public Set<CharacterEntity> characterDTOList2Entity(List<CharacterDTO> dtos) {
 
-        entity.setImage(characterDTO.getImage());
-        entity.setWeight(characterDTO.getWeight());
-        entity.setAge(characterDTO.getAge());
-        entity.setHistory(characterDTO.getHistory());
+        Set<CharacterEntity> entitySet = new HashSet<>();
+
+        for (CharacterDTO dto : dtos) {
+            entitySet.add(this.characterDTO2Entity(dto));
+        }
+
+        return entitySet;
+    }
+
+    private CharacterBasicDTO characterEntity2BasicDTO(CharacterEntity entity) {
+
+        CharacterBasicDTO dto = new CharacterBasicDTO();
+
+        dto.setId(entity.getId());
+        dto.setImage(entity.getImage());
+        dto.setName(entity.getName());
+
+        return dto;
+    }
+
+
+    public List<CharacterBasicDTO> characterEntitySet2BasicDTOList(Collection<CharacterEntity> entityList){
+
+        List<CharacterBasicDTO> dtoList = new ArrayList<>();
+
+        for (CharacterEntity entity : entityList){
+            dtoList.add(characterEntity2BasicDTO(entity));
+        }
+
+        return dtoList;
+    }
+
+    public void characterEntityRefreshValues(CharacterEntity entity, CharacterDTO dto) {
+
+        entity.setImage(dto.getImage());
+        entity.setWeight(dto.getWeight());
+        entity.setAge(dto.getAge());
+        entity.setHistory(dto.getHistory());
 
     }
 

@@ -1,14 +1,14 @@
 package com.alkemy.disney.service.impl;
 
 import com.alkemy.disney.dto.MovieDTO;
+import com.alkemy.disney.dto.MovieFiltersDTO;
 import com.alkemy.disney.entity.CharacterEntity;
 import com.alkemy.disney.entity.MovieEntity;
 import com.alkemy.disney.exception.ParamNotFoundException;
-import com.alkemy.disney.mapper.CharacterMapper;
 import com.alkemy.disney.mapper.MovieMapper;
 import com.alkemy.disney.repository.CharacterRepository;
 import com.alkemy.disney.repository.MovieRepository;
-import com.alkemy.disney.service.CharacterService;
+import com.alkemy.disney.repository.specs.MovieSpecification;
 import com.alkemy.disney.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,11 +22,13 @@ public class MovieServiceImpl implements MovieService {
     private MovieMapper movieMapper;
     private MovieRepository movieRepository;
     private CharacterRepository characterRepository;
+    private MovieSpecification movieSpecification;
 
     @Autowired
     public MovieServiceImpl(MovieMapper movieMapper,
                             MovieRepository movieRepository,
-                            CharacterRepository characterRepository) {
+                            CharacterRepository characterRepository,
+                            MovieSpecification movieSpecification) {
 
         this.movieMapper = movieMapper;
         this.movieRepository = movieRepository;
@@ -67,7 +69,7 @@ public class MovieServiceImpl implements MovieService {
 
         MovieEntity entitySaved = movieRepository.save(entity.get());
 
-        return movieMapper.movieEntity2DTO(entitySaved, true);
+        return movieMapper.movieEntity2DTO(entitySaved, false);
     }
 
     @Override
@@ -91,5 +93,20 @@ public class MovieServiceImpl implements MovieService {
 
         this.movieRepository.save(movie);
     }
+
+    @Override
+    public List<MovieDTO> getMovieByFilters(String title, String creationDate, Long genreId, String order) {
+
+        MovieFiltersDTO filtersDTO = new MovieFiltersDTO(title, creationDate, genreId, order);
+
+        List<MovieEntity> movies = this.movieRepository.findAll(
+                this.movieSpecification.getByFilters(filtersDTO)
+        );
+
+        List<MovieDTO> movieDTOS = this.movieMapper.movieEntityList2DTOList(movies, true);
+
+        return movieDTOS;
+    }
+
 
 }

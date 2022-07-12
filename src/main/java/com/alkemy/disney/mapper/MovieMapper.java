@@ -70,8 +70,8 @@ public class MovieMapper {
 
 
         if (loadCharacters) {
-            List<CharacterDTO> characterDTOS = this.characterMapper.characterEntitySet2DTOList(entity.getCharacters(), false);
-            dto.setCharacters(characterDTOS);
+            List<CharacterDTO> dtos = this.characterMapper.characterEntitySet2DTOList(entity.getCharacters(), false);
+            dto.setCharacters(dtos);
         }
 
         return dto;

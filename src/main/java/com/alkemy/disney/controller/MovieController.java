@@ -47,4 +47,16 @@ public class MovieController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<MovieDTO>> getMovieByFilters(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String creationDate,
+            @RequestParam(required = false) Long genreId,
+            @RequestParam(required = false, defaultValue = "ASC") String order
+    ) {
+        List<MovieDTO> movieDTOS = this.movieService.getMovieByFilters(title, creationDate, genreId, order);
+        return ResponseEntity.ok(movieDTOS);
+    }
+
 }
