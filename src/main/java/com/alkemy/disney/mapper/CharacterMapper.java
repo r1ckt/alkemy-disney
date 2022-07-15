@@ -95,6 +95,7 @@ public class CharacterMapper {
 
     public void characterEntityRefreshValues(CharacterEntity entity, CharacterDTO dto) {
 
+        entity.setName(dto.getName());
         entity.setImage(dto.getImage());
         entity.setWeight(dto.getWeight());
         entity.setAge(dto.getAge());

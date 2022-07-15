@@ -17,7 +17,7 @@ import static javax.persistence.GenerationType.*;
 @Entity
 @Getter
 @Setter
-@SQLDelete(sql="UPDATE character SET deleted = true WHERE id=?")
+@SQLDelete(sql="UPDATE character_entity SET deleted = true WHERE id=?")
 @Where(clause = "deleted = false")
 public class CharacterEntity {
 

@@ -41,15 +41,15 @@ public class CharacterServiceImpl implements CharacterService {
         return characterMapper.characterEntity2DTO(entitySaved,false);
     }
 
-    public CharacterDTO update(Long id, CharacterDTO characterDTO){
+    public CharacterDTO update(Long id, CharacterDTO dto){
 
         Optional<CharacterEntity> entity = characterRepository.findById(id);
 
         if (entity.isEmpty()) {
-            throw new ParamNotFoundException("Error: Invalid character id");
+            throw new ParamNotFoundException("Error: Invalid character id!!");
         }
 
-        characterMapper.characterEntityRefreshValues(entity.get(), characterDTO);
+        characterMapper.characterEntityRefreshValues(entity.get(), dto);
         CharacterEntity entitySaved = characterRepository.save(entity.get());
 
         return characterMapper.characterEntity2DTO(entitySaved,false);
@@ -80,9 +80,7 @@ public class CharacterServiceImpl implements CharacterService {
                 this.characterSpecification.getByFilters(filtersDTO)
         );
 
-        List<CharacterDTO> dtos = this.characterMapper.characterEntitySet2DTOList(entityList, true);
-
-        return dtos;
+        return this.characterMapper.characterEntitySet2DTOList(entityList, true);
     }
 
     public List<CharacterBasicDTO> getAll(){

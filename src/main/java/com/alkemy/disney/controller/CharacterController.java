@@ -39,4 +39,16 @@ public class CharacterController {
         List<CharacterDTO> dtos = this.characterService.getByFilters(name, age, weight, movies);
         return ResponseEntity.ok(dtos);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CharacterDTO> update(@PathVariable Long id, @RequestBody CharacterDTO dtoId) {
+        CharacterDTO result = this.characterService.update(id, dtoId);
+        return ResponseEntity.ok().body(result);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        this.characterService.delete(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
