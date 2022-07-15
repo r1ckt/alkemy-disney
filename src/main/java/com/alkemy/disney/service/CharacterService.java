@@ -13,4 +13,5 @@ public interface CharacterService {
     List<CharacterBasicDTO> getAll();
     CharacterDTO findById(@NonNull Long id);
 
+    List<CharacterDTO> getByFilters(String name, Long age, Long weight, List<Long> movies);
 }

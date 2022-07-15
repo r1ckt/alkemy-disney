@@ -48,7 +48,7 @@ public class MovieController {
     }
 
 
-    @GetMapping("/filter")
+    @GetMapping("/search")
     public ResponseEntity<List<MovieDTO>> getMovieByFilters(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String creationDate,

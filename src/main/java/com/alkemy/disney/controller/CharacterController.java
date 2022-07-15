@@ -28,4 +28,15 @@ public class CharacterController {
         List<CharacterBasicDTO> characters  = characterService.getAll();
         return ResponseEntity.ok().body(characters);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<CharacterDTO>> getByFilters(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Long age,
+            @RequestParam(required = false) Long weight,
+            @RequestParam(required = false) List<Long> movies
+    ) {
+        List<CharacterDTO> dtos = this.characterService.getByFilters(name, age, weight, movies);
+        return ResponseEntity.ok(dtos);
+    }
 }
