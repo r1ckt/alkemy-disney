@@ -98,10 +98,10 @@ public class MovieMapper {
 
         GenreEntity genre = genreRepository.findById(dto.getGenreId()).get();
         entity.setGenre(genre);
-
+/*
         Set<CharacterEntity> characters = this.characterMapper.characterDTOList2Entity(dto.getCharacters());
         entity.setCharacters(characters);
-
+*/
         return entity;
     }
 }

@@ -21,13 +21,13 @@ public class MovieController {
         MovieDTO movieSaved = movieService.create(movieDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(movieSaved);
     }
-
+/*
     @GetMapping
     public ResponseEntity<List<MovieDTO>> getAll() {
         List<MovieDTO> movies = movieService.getAllMovies();
         return ResponseEntity.ok().body(movies);
     }
-
+*/
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         this.movieService.delete(id);
@@ -47,8 +47,13 @@ public class MovieController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<MovieDTO> update(@PathVariable Long id, @RequestBody MovieDTO dto) {
+        MovieDTO result = this.movieService.updateMovie(id, dto);
+        return ResponseEntity.ok().body(result);
+    }
 
-    @GetMapping("/search")
+    @GetMapping
     public ResponseEntity<List<MovieDTO>> getMovieByFilters(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String creationDate,

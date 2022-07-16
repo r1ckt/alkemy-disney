@@ -6,12 +6,14 @@ import com.alkemy.disney.dto.MovieDTO;
 import java.util.List;
 
 public interface MovieService {
-    MovieDTO create(MovieDTO movieDTO);
+    MovieDTO create(MovieDTO dto);
     List<MovieDTO> getAllMovies();
     void delete(Long id);
-    MovieDTO update(Long id, MovieDTO movieDTO);
+    MovieDTO update(Long id, MovieDTO dto);
     void addCharacter(Long idMovie, Long idCharact);
     void removeCharacter(Long idMovie, Long idCharact);
 
     List<MovieDTO> getMovieByFilters(String title, String creationDate, Long genreId, String order);
+
+    MovieDTO updateMovie(Long id, MovieDTO dto);
 }
