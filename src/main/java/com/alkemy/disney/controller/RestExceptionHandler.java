@@ -25,7 +25,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
         ApiErrorDTO errorDTO = new ApiErrorDTO(HttpStatus.BAD_REQUEST,
                                                ex.getMessage(),
-                                               Arrays.asList("Param Not Found")
+                                               Arrays.asList("Param Not Found!")
         );
 
         return handleExceptionInternal(ex, errorDTO, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
