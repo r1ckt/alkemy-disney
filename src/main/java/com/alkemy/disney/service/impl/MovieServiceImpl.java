@@ -51,7 +51,7 @@ public class MovieServiceImpl implements MovieService {
         MovieEntity movieEntity = movieMapper.movieDTO2Entity(dto);
         MovieEntity savedMovie = movieRepository.save(movieEntity);
 
-        return movieMapper.movieEntity2DTO(savedMovie, false);
+        return movieMapper.movieEntity2DTO(savedMovie, true);
     }
 
 
@@ -79,7 +79,7 @@ public class MovieServiceImpl implements MovieService {
 
         MovieEntity entitySaved = movieRepository.save(entity);
 
-        return movieMapper.movieEntity2DTO(entitySaved, false);
+        return movieMapper.movieEntity2DTO(entitySaved, true);
     }
 
     @Override

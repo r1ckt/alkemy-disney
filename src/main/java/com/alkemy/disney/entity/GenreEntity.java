@@ -2,12 +2,10 @@ package com.alkemy.disney.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
-import static javax.persistence.GenerationType.*;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "genre")

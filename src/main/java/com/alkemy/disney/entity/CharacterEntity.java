@@ -7,13 +7,10 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-
 import java.util.List;
 import java.util.Objects;
 
-
-import static javax.persistence.CascadeType.*;
-import static javax.persistence.GenerationType.*;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter

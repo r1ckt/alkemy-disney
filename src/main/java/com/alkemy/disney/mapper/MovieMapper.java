@@ -42,6 +42,11 @@ public class MovieMapper {
         return LocalDate.parse(stringDate, formatter);
     }
 
+    private String localDate2String(LocalDate localDate){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return localDate.format(formatter);
+    }
+
     public MovieEntity movieDTO2Entity(MovieDTO dto) {
 
         GenreEntity genre = genreRepository.findById(dto.getGenreId())
@@ -104,18 +109,16 @@ public class MovieMapper {
                 .orElseThrow(() -> new ParamNotFoundException(ErrorEnum.ID_GENRE_NOT_VALID.getMessage()));
 
         entity.setGenre(genre);
-/*
-        Set<CharacterEntity> characters = this.characterMapper.characterDTOList2Entity(dto.getCharacters());
-        entity.setCharacters(characters);
-*/
+
     }
     private MovieBasicDTO movieEntity2BasicDTO(MovieEntity entity) {
 
         MovieBasicDTO dto = new MovieBasicDTO();
 
-        dto.setId(entity.getId());
+
         dto.setImage(entity.getImage());
         dto.setTitle(entity.getTitle());
+        dto.setCreationDate(localDate2String(entity.getCreationDate()));
 
         return dto;
     }

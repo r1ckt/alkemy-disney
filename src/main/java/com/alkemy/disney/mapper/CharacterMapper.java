@@ -74,7 +74,7 @@ public class CharacterMapper {
 
         CharacterBasicDTO dto = new CharacterBasicDTO();
 
-        dto.setId(entity.getId());
+
         dto.setImage(entity.getImage());
         dto.setName(entity.getName());
 

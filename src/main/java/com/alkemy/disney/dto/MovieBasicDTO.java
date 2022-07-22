@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MovieBasicDTO {
-    private Long id;
+
     private String image;
     private String title;
     private String creationDate;

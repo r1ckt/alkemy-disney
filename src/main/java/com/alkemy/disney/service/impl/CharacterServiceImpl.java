@@ -49,7 +49,7 @@ public class CharacterServiceImpl implements CharacterService {
         characterMapper.characterEntityRefreshValues(entity, dto);
         CharacterEntity entitySaved = characterRepository.save(entity);
 
-        return characterMapper.characterEntity2DTO(entitySaved,false);
+        return characterMapper.characterEntity2DTO(entitySaved,true);
 
     }
 
