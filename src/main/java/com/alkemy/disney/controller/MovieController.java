@@ -1,12 +1,15 @@
 package com.alkemy.disney.controller;
 
+import com.alkemy.disney.dto.MovieBasicDTO;
 import com.alkemy.disney.dto.MovieDTO;
 import com.alkemy.disney.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -17,7 +20,7 @@ public class MovieController {
     private MovieService movieService;
 
     @PostMapping
-    public ResponseEntity<MovieDTO> save(@RequestBody MovieDTO movieDTO){
+    public ResponseEntity<MovieDTO> save(@Valid @RequestBody MovieDTO movieDTO){
         MovieDTO movieSaved = movieService.create(movieDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(movieSaved);
     }
@@ -49,18 +52,20 @@ public class MovieController {
 
     @PutMapping("/{id}")
     public ResponseEntity<MovieDTO> update(@PathVariable Long id, @RequestBody MovieDTO dto) {
-        MovieDTO result = this.movieService.updateMovie(id, dto);
+        MovieDTO result = this.movieService.update(id, dto);
         return ResponseEntity.ok().body(result);
     }
 
     @GetMapping
-    public ResponseEntity<List<MovieDTO>> getMovieByFilters(
+    public ResponseEntity<List<MovieBasicDTO>> getMovieByFilters(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String creationDate,
             @RequestParam(required = false) Long genreId,
             @RequestParam(required = false, defaultValue = "ASC") String order
     ) {
-        List<MovieDTO> movieDTOS = this.movieService.getMovieByFilters(title, creationDate, genreId, order);
+
+        List<MovieBasicDTO> movieDTOS = this.movieService.getMovieByFilters(title, creationDate, genreId, order);
+
         return ResponseEntity.ok(movieDTOS);
     }
 

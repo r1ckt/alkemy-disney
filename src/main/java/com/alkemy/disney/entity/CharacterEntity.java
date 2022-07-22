@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 
 import java.util.List;
+import java.util.Objects;
 
 
 import static javax.persistence.CascadeType.*;
@@ -45,4 +46,17 @@ public class CharacterEntity {
     @ManyToMany(mappedBy = "characters")
     private List<MovieEntity> movies = new ArrayList<>();
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CharacterEntity that = (CharacterEntity) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

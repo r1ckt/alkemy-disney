@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -18,7 +19,7 @@ public class CharacterController {
     private CharacterService characterService;
 
     @PostMapping
-    public ResponseEntity<CharacterDTO> save(@RequestBody CharacterDTO characterDTO){
+    public ResponseEntity<CharacterDTO> save(@Valid @RequestBody CharacterDTO characterDTO){
         CharacterDTO characterSaved = characterService.save(characterDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(characterSaved);
     }
@@ -30,13 +31,13 @@ public class CharacterController {
     }
 */
     @GetMapping
-    public ResponseEntity<List<CharacterDTO>> getByFilters(
+    public ResponseEntity<List<CharacterBasicDTO>> getByFilters(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Long age,
             @RequestParam(required = false) Long weight,
             @RequestParam(required = false) List<Long> movies
     ) {
-        List<CharacterDTO> dtos = this.characterService.getByFilters(name, age, weight, movies);
+        List<CharacterBasicDTO> dtos = this.characterService.getByFilters(name, age, weight, movies);
         return ResponseEntity.ok(dtos);
     }
 

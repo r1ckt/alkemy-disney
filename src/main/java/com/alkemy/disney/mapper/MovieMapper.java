@@ -2,10 +2,13 @@
 package com.alkemy.disney.mapper;
 
 import com.alkemy.disney.dto.CharacterDTO;
+import com.alkemy.disney.dto.MovieBasicDTO;
 import com.alkemy.disney.dto.MovieDTO;
 import com.alkemy.disney.entity.CharacterEntity;
 import com.alkemy.disney.entity.GenreEntity;
 import com.alkemy.disney.entity.MovieEntity;
+import com.alkemy.disney.exception.ErrorEnum;
+import com.alkemy.disney.exception.ParamNotFoundException;
 import com.alkemy.disney.repository.GenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -41,7 +44,8 @@ public class MovieMapper {
 
     public MovieEntity movieDTO2Entity(MovieDTO dto) {
 
-        GenreEntity genre = genreRepository.findById(dto.getGenreId()).orElseThrow();
+        GenreEntity genre = genreRepository.findById(dto.getGenreId())
+                .orElseThrow(() -> new ParamNotFoundException(ErrorEnum.ID_GENRE_NOT_VALID.getMessage()));
 
         MovieEntity movie = new MovieEntity();
 
@@ -89,19 +93,41 @@ public class MovieMapper {
     }
 
 
-    public MovieEntity movieEntityRefreshValues(MovieEntity entity, MovieDTO dto) {
+    public void movieEntityRefreshValues(MovieEntity entity, MovieDTO dto) {
 
         entity.setTitle(dto.getTitle());
         entity.setImage(dto.getImage());
         entity.setRate(dto.getRate());
         entity.setCreationDate(this.string2LocalDate(dto.getCreationDate()));
 
-        GenreEntity genre = genreRepository.findById(dto.getGenreId()).get();
+        GenreEntity genre = genreRepository.findById(dto.getGenreId())
+                .orElseThrow(() -> new ParamNotFoundException(ErrorEnum.ID_GENRE_NOT_VALID.getMessage()));
+
         entity.setGenre(genre);
 /*
         Set<CharacterEntity> characters = this.characterMapper.characterDTOList2Entity(dto.getCharacters());
         entity.setCharacters(characters);
 */
-        return entity;
+    }
+    private MovieBasicDTO movieEntity2BasicDTO(MovieEntity entity) {
+
+        MovieBasicDTO dto = new MovieBasicDTO();
+
+        dto.setId(entity.getId());
+        dto.setImage(entity.getImage());
+        dto.setTitle(entity.getTitle());
+
+        return dto;
+    }
+
+    public List<MovieBasicDTO> movieEntityList2DTOList(List<MovieEntity> entityList) {
+
+        List<MovieBasicDTO> dtos = new ArrayList<>();
+
+        for (MovieEntity entity : entityList) {
+            dtos.add(this.movieEntity2BasicDTO(entity));
+        }
+
+        return dtos;
     }
 }

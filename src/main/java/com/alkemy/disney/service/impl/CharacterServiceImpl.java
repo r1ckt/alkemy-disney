@@ -4,6 +4,7 @@ import com.alkemy.disney.dto.CharacterBasicDTO;
 import com.alkemy.disney.dto.CharacterDTO;
 import com.alkemy.disney.dto.CharacterFiltersDTO;
 import com.alkemy.disney.entity.CharacterEntity;
+import com.alkemy.disney.exception.ErrorEnum;
 import com.alkemy.disney.exception.ParamNotFoundException;
 import com.alkemy.disney.mapper.CharacterMapper;
 import com.alkemy.disney.repository.CharacterRepository;
@@ -14,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CharacterServiceImpl implements CharacterService {
@@ -41,38 +41,35 @@ public class CharacterServiceImpl implements CharacterService {
         return characterMapper.characterEntity2DTO(entitySaved,false);
     }
 
-    public CharacterDTO update(Long id, CharacterDTO dto){
+    public CharacterDTO update(@NonNull Long id, CharacterDTO dto){
 
-        Optional<CharacterEntity> entity = characterRepository.findById(id);
+        CharacterEntity entity = characterRepository.findById(id)
+                .orElseThrow(() -> new ParamNotFoundException(ErrorEnum.ID_CHARACTER_NOT_VALID.getMessage()));
 
-        if (entity.isEmpty()) {
-            throw new ParamNotFoundException("Error: Invalid character id!!");
-        }
-
-        characterMapper.characterEntityRefreshValues(entity.get(), dto);
-        CharacterEntity entitySaved = characterRepository.save(entity.get());
+        characterMapper.characterEntityRefreshValues(entity, dto);
+        CharacterEntity entitySaved = characterRepository.save(entity);
 
         return characterMapper.characterEntity2DTO(entitySaved,false);
 
     }
 
     public void delete(@NonNull Long id){
+        characterRepository.findById(id)
+                .orElseThrow(() -> new ParamNotFoundException(ErrorEnum.ID_CHARACTER_NOT_VALID.getMessage()));
+
         characterRepository.deleteById(id);
     }
 
     public CharacterDTO findById(@NonNull Long id) {
 
-        Optional<CharacterEntity> entity = characterRepository.findById(id);
+        CharacterEntity entity = characterRepository.findById(id)
+                .orElseThrow(() -> new ParamNotFoundException(ErrorEnum.ID_CHARACTER_NOT_VALID.getMessage()));
 
-        if (entity.isEmpty()) {
-            throw new ParamNotFoundException("Error: Invalid character id.");
-        }
-
-        return characterMapper.characterEntity2DTO(entity.get(),true);
+        return characterMapper.characterEntity2DTO(entity,true);
     }
 
     @Override
-    public List<CharacterDTO> getByFilters(String name, Long age, Long weight, List<Long> movies) {
+    public List<CharacterBasicDTO> getByFilters(String name, Long age, Long weight, List<Long> movies) {
 
         CharacterFiltersDTO filtersDTO = new CharacterFiltersDTO(name, age, weight, movies);
 
@@ -80,14 +77,7 @@ public class CharacterServiceImpl implements CharacterService {
                 this.characterSpecification.getByFilters(filtersDTO)
         );
 
-        return this.characterMapper.characterEntitySet2DTOList(entityList, true);
-    }
-
-    public List<CharacterBasicDTO> getAll(){
-
-        List<CharacterEntity> entities = characterRepository.findAll();
-
-        return this.characterMapper.characterEntitySet2BasicDTOList(entities);
+        return this.characterMapper.characterEntitySet2BasicDTOList(entityList);
     }
 
 }

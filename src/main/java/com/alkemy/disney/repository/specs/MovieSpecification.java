@@ -53,6 +53,7 @@ public class MovieSpecification {
 
             // Order resolver
             String orderByField = "creationDate";
+
             query.orderBy(
                     filtersDTO.isASC() ?
                             criteriaBuilder.asc(root.get(orderByField)) :

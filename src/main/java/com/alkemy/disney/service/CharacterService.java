@@ -10,8 +10,7 @@ public interface CharacterService {
     CharacterDTO save(CharacterDTO characterDTO);
     CharacterDTO update(Long id, CharacterDTO characterDTO);
     void delete(@NonNull Long id);
-    List<CharacterBasicDTO> getAll();
     CharacterDTO findById(@NonNull Long id);
 
-    List<CharacterDTO> getByFilters(String name, Long age, Long weight, List<Long> movies);
+    List<CharacterBasicDTO> getByFilters(String name, Long age, Long weight, List<Long> movies);
 }
