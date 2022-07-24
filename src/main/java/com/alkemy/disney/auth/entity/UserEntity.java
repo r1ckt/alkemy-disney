@@ -19,9 +19,8 @@ public class UserEntity implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Email
-    private String email;
-
-    @Size(min = 8, max = 16)
+    private String username;
+    @Size(min = 8)
     private String password;
 
     private boolean accountNonExpired;
@@ -29,13 +28,19 @@ public class UserEntity implements UserDetails {
     private boolean credentialsNonExpired;
     private boolean enabled;
 
+    public UserEntity() {
+        this.accountNonExpired = true;
+        this.accountNonLocked = true;
+        this.credentialsNonExpired = true;
+        this.enabled = true;
+
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
-
     @Override
-    public String getUsername() {
-        return null;
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 }
