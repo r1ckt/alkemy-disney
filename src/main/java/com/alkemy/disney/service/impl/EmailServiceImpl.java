@@ -1,6 +1,7 @@
 package com.alkemy.disney.service.impl;
 
 import com.alkemy.disney.exception.ErrorEnum;
+import com.alkemy.disney.exception.ParamNotFoundException;
 import com.alkemy.disney.service.EmailService;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
@@ -56,7 +57,7 @@ public class EmailServiceImpl implements EmailService {
             System.out.println(response.getBody());
             System.out.println(response.getHeaders());
         } catch (IOException e) {
-            ErrorEnum.ERROR_TO_SEND_EMAIL.getMessage();
+           throw new ParamNotFoundException(ErrorEnum.ERROR_TO_SEND_EMAIL.getMessage());
         }
 
     }
