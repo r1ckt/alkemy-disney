@@ -41,7 +41,7 @@ public class UserAuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest authRequest) throws Exception {
+    public ResponseEntity<AuthenticationResponse> login(@Valid @RequestBody AuthenticationRequest authRequest) throws Exception {
         return ResponseEntity.ok(new AuthenticationResponse(this.userDetailsCustomService.tokenSignIn(authRequest)));
     }
 
