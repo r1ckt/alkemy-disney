@@ -1,5 +1,6 @@
 package com.alkemy.disney.dto;
 
+import com.alkemy.disney.exception.ErrorEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

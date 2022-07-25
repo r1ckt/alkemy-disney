@@ -1,6 +1,7 @@
 package com.alkemy.disney.controller;
 
 import com.alkemy.disney.dto.ApiErrorDTO;
+import com.alkemy.disney.exception.ErrorEnum;
 import com.alkemy.disney.exception.ParamNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
         ApiErrorDTO errorDTO = new ApiErrorDTO(HttpStatus.BAD_REQUEST,
                                                ex.getMessage(),
-                                               Arrays.asList("Param Not Found!")
+                                               Arrays.asList("")
         );
 
         return handleExceptionInternal(ex, errorDTO, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
@@ -41,11 +42,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         List<String> errors = new ArrayList<>();
 
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            errors.add(error.getField()+ ":" + error.getDefaultMessage());
+            errors.add(error.getField()+ " : " + error.getDefaultMessage());
         }
 
         for (ObjectError error: ex.getBindingResult().getGlobalErrors()){
-            errors.add(error.getObjectName()+ ":" +error.getDefaultMessage());
+            errors.add(error.getObjectName() + " : " + error.getDefaultMessage());
         }
 
         ApiErrorDTO apiError = new ApiErrorDTO(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);

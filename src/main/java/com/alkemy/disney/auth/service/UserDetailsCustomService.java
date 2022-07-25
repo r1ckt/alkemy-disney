@@ -5,6 +5,7 @@ import com.alkemy.disney.auth.dto.UserDTO;
 import com.alkemy.disney.auth.entity.UserEntity;
 import com.alkemy.disney.auth.repository.UserRepository;
 import com.alkemy.disney.exception.ErrorEnum;
+import com.alkemy.disney.exception.ParamNotFoundException;
 import com.alkemy.disney.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Optional;
 
 @Service
 public class UserDetailsCustomService implements UserDetailsService {
@@ -60,6 +62,13 @@ public class UserDetailsCustomService implements UserDetailsService {
     }
 
     public boolean save(UserDTO dto) {
+
+        UserEntity user = userRepository.findByUsername(dto.getUsername());
+
+        if(user != null){
+            throw new ParamNotFoundException(ErrorEnum.USER_ALREADY_EXIST.getMessage());
+        }
+        
         UserEntity entity = new UserEntity();
 
         entity.setUsername(dto.getUsername());
