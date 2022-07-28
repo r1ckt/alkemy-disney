@@ -23,13 +23,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    @Lazy
+    private JwtRequestFilter jwtRequestFilter;
     private UserDetailsCustomService userDetailsCustomServiceService;
 
     @Autowired
-    @Lazy
-    private JwtRequestFilter jwtRequestFilter;
+    public SecurityConfiguration(@Lazy JwtRequestFilter jwtRequestFilter,
+                                 @Lazy UserDetailsCustomService userDetailsCustomServiceService) {
+
+        this.jwtRequestFilter = jwtRequestFilter;
+        this.userDetailsCustomServiceService = userDetailsCustomServiceService;
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

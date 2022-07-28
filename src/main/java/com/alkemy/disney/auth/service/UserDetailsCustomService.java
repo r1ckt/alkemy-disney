@@ -20,7 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.Optional;
 
 @Service
 public class UserDetailsCustomService implements UserDetailsService {
@@ -61,7 +60,7 @@ public class UserDetailsCustomService implements UserDetailsService {
 
     }
 
-    public boolean save(UserDTO dto) {
+    public void save(UserDTO dto) {
 
         UserEntity user = userRepository.findByUsername(dto.getUsername());
 
@@ -80,8 +79,6 @@ public class UserDetailsCustomService implements UserDetailsService {
         if (userRepository.findByUsername(entity.getUsername()) != null) {
             emailService.sendWelcomeEmailTo(entity.getUsername());
         }
-
-        return true;
     }
 
     public String tokenSignIn(AuthenticationRequest authRequest) throws Exception {

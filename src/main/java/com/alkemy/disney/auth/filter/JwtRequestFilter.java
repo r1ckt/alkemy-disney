@@ -1,12 +1,9 @@
 package com.alkemy.disney.auth.filter;
 
-import com.alkemy.disney.auth.repository.UserRepository;
 import com.alkemy.disney.auth.service.JwtUtils;
 import com.alkemy.disney.auth.service.UserDetailsCustomService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -53,17 +50,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
             UserDetails userDetails = this.userDetailsCustomService.loadUserByUsername(username);
 
             if (jwtUtil.validateToken(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authReq =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities())
-                        ;
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
                 authReq.setDetails(authReq);
                 SecurityContextHolder.getContext().setAuthentication(authReq);
-
             }
         }
         filterChain.doFilter(request, response);
