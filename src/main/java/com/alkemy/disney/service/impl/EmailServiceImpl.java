@@ -19,21 +19,27 @@ import java.io.IOException;
 
 @Service
 public class EmailServiceImpl implements EmailService {
-    @Autowired
-    private Environment env;
 
     @Value("${com.alkemy.disney.email.sender}")
     private String emailSender;
 
     @Value("${com.alkemy.disney.email.enabled}")
     private boolean enabled;
+    private Environment env;
+    private SendGrid sendGrid;
+
+    @Autowired
+    public EmailServiceImpl(Environment env,
+                            SendGrid sendGrid) {
+        this.env = env;
+        this.sendGrid = sendGrid;
+    }
 
     @Override
     public void sendWelcomeEmailTo(String to) {
-        if (!enabled){
+        if (!enabled) {
             return;
         }
-        String apiKey = env.getProperty("EMAIL_API_KEY");
 
         Email fromEmail = new Email(emailSender);
         Email toEmail = new Email(to);
@@ -44,18 +50,18 @@ public class EmailServiceImpl implements EmailService {
         );
         Mail mail = new Mail(fromEmail, subject, toEmail, content);
 
-        SendGrid sg = new SendGrid(apiKey);
         Request request = new Request();
+        Response response = null;
 
         try {
 
             request.setMethod(Method.POST);
             request.setEndpoint("mail/send");
             request.setBody(mail.build());
-            Response response = sg.api(request);
+            response = this.sendGrid.api(request);
 
         } catch (IOException e) {
-           throw new ParamNotFoundException(ErrorEnum.ERROR_TO_SEND_EMAIL.getMessage());
+            throw new ParamNotFoundException(ErrorEnum.ERROR_TO_SEND_EMAIL.getMessage());
         }
 
     }
